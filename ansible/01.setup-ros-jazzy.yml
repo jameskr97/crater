@@ -1,0 +1,108 @@
+# This is for setting up ROS Jazzy on a computer running Ubuntu Jammy.
+# Running this playbook will setup your system from *a fresh install* of ubuntu jammy.
+# This is a playbook of convinience, not a playbook of resolution. If you are having trouble
+# with your ros setup, running this script a second time will likely not fix it.
+
+# If you are having trouble running the simulator (and you're running in a VM like I am)
+# it is probably because your graphics drivers need to be updated. Use mesa precompiled ones:
+# - sudo add-apt-repository ppa:oibaf/graphics-drivers
+# - sudo apt update
+# - sudo ppa-purge ppa:oibaf/graphics-drivers
+
+# That is all I needed to run in order to get the graphics drivers to run on a Ubuntu 24.04 VM
+
+---
+- name: Setup ROS2 Jammy LTS
+  hosts: localhost
+  connection: local
+  become: yes
+
+  vars:
+    unix_username: "{{ lookup('env', 'USER') }}"
+    should_modify_bash_profile: true
+    ros2_distro: jazzy
+    ros2_config: desktop # desktop or ros-base
+    ros1_gpgkey_url: https://raw.githubusercontent.com/ros/rosdistro/master/ros.key
+    ros2_repo_url: http://packages.ros.org/ros2/ubuntu
+
+  tasks:
+    - name: Include {{ ros2_distro }} in .profile
+      when: should_modify_bash_profile == true
+      lineinfile:
+        path: "/home/{{ unix_username }}/.profile"
+        line: "{{ item }}"
+        create: yes
+        state: present
+      with_items:
+        - export LIBGL_DRI3_DISABLE=1
+        - source /opt/ros/{{ ros2_distro }}/setup.bash
+        - alias rviz2="ros2 run rviz2 rviz2"
+        - alias cbuild="colcon build --symlink-install"
+
+    - name: Install prerequisite packages
+      apt:
+        name:
+          - software-properties-common
+          - apt-transport-https
+        state: present
+
+    - name: Download required apt keys
+      get_url:
+        url: "{{ item.url }}"
+        dest: "{{ item.dest }}"
+        mode: "0644"
+      with_items:
+        - {
+            url: "https://raw.githubusercontent.com/ros/rosdistro/master/ros.key",
+            dest: /usr/share/keyrings/ros-archive-keyring.gpg,
+          }
+        - {
+            url: "https://librealsense.intel.com/Debian/librealsense.pgp",
+            dest: /etc/apt/keyrings/librealsense.pgp,
+          }
+
+    - name: Get architecture
+      shell: dpkg --print-architecture
+      register: architecture
+
+    - name: Get Ubuntu codename
+      shell: . /etc/os-release && echo $UBUNTU_CODENAME
+      register: ubuntu_codename
+
+    - name: add universe to repos
+      shell: add-apt-repository universe -y
+
+    - name: Ensure ROS2+RealSense repositories are installed
+      lineinfile:
+        path: "{{ item.path }}"
+        line: "{{ item.line }}"
+        create: yes
+        state: present
+      with_items:
+        - {
+            path: /etc/apt/sources.list.d/ros2.list,
+            line: "deb [arch={{ architecture.stdout }} signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] {{ ros2_repo_url }} {{ ubuntu_codename.stdout }} main",
+          }
+
+    - name: apt update
+      apt: update_cache=yes upgrade=yes
+
+    # The packages here total ~7 gigabytes. It will seem like it froze, it didn't.
+    # If it's running too slow for you, ensure you're plugged into ethernet.
+    # If you run it a second time, it should run quickly. It won't try to install twice.
+    - name: Install ROS + RealSense libraries
+      apt:
+        name:
+          - ros-{{ ros2_distro }}-{{ ros2_config }} # The ros2 distro itself (long download + install)
+          - ros-dev-tools # ROS2 Development Tools (long download + install)
+          - ros-{{ ros2_distro }}-xacro # ROS2 Xacro (XML Macro) tool
+          - ros-{{ ros2_distro }}-diagnostic-updater # Tool to view diagnostics data
+          - ros-{{ ros2_distro }}-joint-state-publisher-gui # Tool to publish states (useful when modifying XML Macro)
+          - ros-{{ ros2_distro }}-ros-gz # Gazebo simulator (long download + install)
+          - ros-{{ ros2_distro }}-ros2-control
+          - ros-{{ ros2_distro }}-ros2-controllers
+          - ros-{{ ros2_distro }}-gz-ros2-control
+          - ros-{{ ros2_distro }}-joy
+        state: present
+
+
