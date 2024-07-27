@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!-- Base Arm Properties -->
+    <xacro:property name="chassis_x" value="0.4" />
+    <xacro:property name="chassis_y" value="0.3" />
+    <xacro:property name="chassis_z" value="0.15" />
+
+    <!-- Mount Rod Properties -->
+    <xacro:property name="compute_rod_x" value="0" />
+    <xacro:property name="compute_rod_z" value="0" />
+    <xacro:property name="compute_rod_length" value="${chassis_y + 0.060}" />
+    <xacro:property name="compute_rod_radius" value="0.02" />
+    <xacro:property name="wheel_bar_width" value="" />
+
+    <!-- Upper Arm Properties -->
+    <!-- The rear has a wheel attached. The front is a rotational joint for balance -->
+    <xacro:property name="front_angle" value="0.4" />
+    <xacro:property name="back_angle" value="-0.5" />
+
+    <!-- Lower Front Arm Properties -->
+    <xacro:property name="front_length" value="0.15" />
+    <xacro:property name="back_length" value="0.25" />
+
+
+    <!-- Includes -->
+    <xacro:include filename="colors.xacro" />
+
+    <!-- Include Bodies -->
+    <xacro:include filename="bodies/center_chassis.xacro" />
+    <xacro:include filename="bodies/upper_suspension.xacro" />
+    <xacro:include filename="bodies/lower_front_suspension.xacro" />
+    <xacro:include filename="bodies/wheel.xacro" />
+
+    <!-- Center Frame of Reference -->
+    <link name="base_link" />
+
+    <!-- Link body to origin rod  -->
+    <joint name="compute_box_joint" type="fixed">
+        <parent link="base_link" />
+        <child link="compute_box" />
+        <origin xyz="0 0 0.2" />
+    </joint>
+
+    <!-- Add arm bases to compute rod -->
+    <xacro:base_arm prefix="right" reflect="-1" front_angle="${front_angle}" back_angle="${back_angle}" />
+    <xacro:base_arm prefix="left" reflect="1" front_angle="${front_angle}" back_angle="${back_angle}" />
+
+    <!-- Add front lower mounts to upper mount -->
+    <xacro:front_lower_suspension prefix="left" reflect="1" offset_angle="${front_angle}" />
+    <xacro:front_lower_suspension prefix="right" reflect="-1" offset_angle="${front_angle}" />
+
+    <!-- Add the 6 wheels to the robot -->
+    <!-- 3 Left Wheels -->
+    <xacro:wheel parent="left_front_lower_susp" prefix="LF" reflect="1" offset_x="0.065" offset_z="-0.06"/>
+    <xacro:wheel parent="left_front_lower_susp" prefix="LM" reflect="1" offset_x="-0.065" offset_z="-0.06"/>
+    <xacro:wheel parent="left_base_arm_back" prefix="LR" reflect="1" offset_x="${-back_length}" offset_z="0"/>
+
+    <!-- 3 Right Wheels -->
+    <xacro:wheel parent="right_front_lower_susp" prefix="RF" reflect="-1" offset_x="0.065" offset_z="-0.06"/>
+    <xacro:wheel parent="right_front_lower_susp" prefix="RM" reflect="-1" offset_x="-0.065" offset_z="-0.06"/>
+    <xacro:wheel parent="right_base_arm_back" prefix="RR" reflect="-1" offset_x="${-back_length}" offset_z="0"/>
+
+
+</robot>

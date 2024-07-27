@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:macro name="arm_segment" params="reflect length angle">
+        <visual>
+            <geometry>
+                <box size="${length} 0.01 0.02" />
+            </geometry>
+            <origin xyz="${reflect*length/3} 0 -${length/3}" rpy="0 ${angle} 0" />
+        </visual>
+    </xacro:macro>
+
+    <xacro:macro name="front_lower_suspension" params="prefix reflect offset_angle">
+        <xacro:property name="forward_length" value="0.1" />
+        <link name="${prefix}_front_lower_susp">
+            <xacro:arm_segment reflect="1" length="0.1" angle="0.70" />
+            <xacro:arm_segment reflect="-1" length="0.1" angle="5.7" />
+        </link>
+
+        <joint name="upper_mount_to_${prefix}_front_wheel_frame" type="fixed">
+            <!-- <limit upper="0.4" lower="-0.4" effort="10" velocity="10" /> -->
+            <axis xyz="0 1 0" />
+            <parent link="${prefix}_base_arm_front" />
+            <child link="${prefix}_front_lower_susp" />
+            <origin xyz="0.15 0 0" rpy="0 -${offset_angle} 0" />
+        </joint>
+    </xacro:macro>
+</robot>

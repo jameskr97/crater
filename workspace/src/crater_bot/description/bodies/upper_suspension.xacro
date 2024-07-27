@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:macro name="base_arm" params="prefix reflect front_angle back_angle">
+        <link name="${prefix}_base_arm_front">
+            <visual>
+                <origin xyz="${front_length/2} 0 0" />
+                <geometry>
+                    <box size="${front_length} 0.01 0.02"/>
+                </geometry>
+                <material name="white"/>
+            </visual>
+        </link>
+
+        <joint name ="base_to_${prefix}_base_arm_front" type="fixed">
+            <parent link="compute_box" />
+            <child link="${prefix}_base_arm_front" />
+            <origin xyz="0 ${reflect*(compute_rod_length/2)} ${compute_rod_x}" rpy="0 ${front_angle} 0"/>
+        </joint>
+
+        <link name="${prefix}_base_arm_back">
+            <visual>
+                <origin xyz="-${back_length/2} 0 0"/>
+                <geometry>
+                    <box size="${back_length} 0.01 0.02"/>
+                </geometry>
+                <material name="white"/>
+            </visual>
+        </link>
+
+        <joint name ="base_to_${prefix}_base_arm_back" type="fixed">
+            <parent link="compute_box" />
+            <child link="${prefix}_base_arm_back" />
+            <origin xyz="0 ${reflect*(compute_rod_length/2)} ${compute_rod_x}" rpy="0 ${back_angle} 0" />
+        </joint>
+
+    </xacro:macro>
+</robot>
+
+
