@@ -8,6 +8,12 @@
             </geometry>
             <origin xyz="${reflect*length/3} 0 -${length/3}" rpy="0 ${angle} 0" />
         </visual>
+        <collision>
+            <geometry>
+                <box size="${length} 0.01 0.02" />
+            </geometry>
+            <origin xyz="${reflect*length/3} 0 -${length/3}" rpy="0 ${angle} 0" />
+        </collision>
     </xacro:macro>
 
     <xacro:macro name="front_lower_suspension" params="prefix reflect offset_angle">

@@ -9,6 +9,12 @@
                 </geometry>
                 <material name="white"/>
             </visual>
+            <collision>
+                <origin xyz="${front_length/2} 0 0" />
+                <geometry>
+                    <box size="${front_length} 0.01 0.02"/>
+                </geometry>
+            </collision>
         </link>
 
         <joint name ="base_to_${prefix}_base_arm_front" type="fixed">
@@ -25,6 +31,12 @@
                 </geometry>
                 <material name="white"/>
             </visual>
+            <collision>
+                <origin xyz="${front_length/2} 0 0" />
+                <geometry>
+                    <box size="${front_length} 0.01 0.02"/>
+                </geometry>
+            </collision>
         </link>
 
         <joint name ="base_to_${prefix}_base_arm_back" type="fixed">
