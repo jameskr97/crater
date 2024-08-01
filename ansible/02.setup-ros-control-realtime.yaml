@@ -1,0 +1,43 @@
+# This script is to prepare ros2_control to be used with the robot
+---
+- name: Setup ROS2 Jammy LTS
+  hosts: localhost
+  connection: local
+  become: yes
+
+  vars:
+    unix_username: "{{ lookup('env', 'USER') }}"
+
+  tasks:
+    - name: Ensure the realtime group is present
+      group:
+        name: "realtime"
+
+    - name: Add current user to the realtime group
+      user:
+        name: "{{ unix_username }}"
+        groups: "realtime"
+        append: yes
+
+    - name: Ensure limits are set for realtime group
+      copy:
+        dest: /etc/security/limits.d/realtime.conf
+        content: |
+          @realtime soft rtprio 99
+          @realtime soft priority 99
+          @realtime soft memlock 102400
+          @realtime hard rtprio 99
+          @realtime hard priority 99
+          @realtime hard memlock 102400
+
+    - name: Install linux-lowlatency
+      apt:
+        name: linux-lowlatency
+        state: present
+
+    - name: Notify user of required actions
+      debug:
+        msg: |
+          Group membership changes have been applied.
+          Please log out and log back in for the changes to take effect.
+          Alternatively, you can run 'newgrp realtime' in your current session.
