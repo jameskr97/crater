@@ -1,4 +1,10 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="crater">
+
+    <!-- <xacro:include filename="gazebo/crater_bot.gazebo.xacro" /> -->
     <xacro:include filename="crater_core.xacro" />
+    <xacro:include filename="ros2_control.xacro" />
+
+
+    <!-- =============== Gazebo =============== -->
 </robot>

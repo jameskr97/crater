@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="crater_bot_gazebo">
+
+    <!-- =============== Gazebo =============== -->
+    <gazebo>
+      <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+        <parameters>config/controllers.yaml</parameters>
+      </plugin>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>
