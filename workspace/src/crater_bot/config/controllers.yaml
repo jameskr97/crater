@@ -1,7 +1,7 @@
 controller_manager:
   ros__parameters:
     update_rate: 30  # Hz
-    use_sim_time: true
+    use_sim_time: false
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
@@ -11,39 +11,14 @@ controller_manager:
 
 diff_cont:
   ros__parameters:
-    left_wheel_names: ["LF_wheel_to_lower_suspension", "LM_wheel_to_lower_suspension", "LR_wheel_to_lower_suspension"]
-    right_wheel_names: ["RF_wheel_to_lower_suspension", "RM_wheel_to_lower_suspension", "RR_wheel_to_lower_suspension"]
+    # left_wheel_names: ["LF_wheel_to_lower_suspension", "LM_wheel_to_lower_suspension", "LR_wheel_to_lower_suspension"]
+    # right_wheel_names: ["RF_wheel_to_lower_suspension", "RM_wheel_to_lower_suspension", "RR_wheel_to_lower_suspension"]
+    left_wheel_names: ["RF_wheel_to_lower_suspension"]
+    right_wheel_names: ["LF_wheel_to_lower_suspension"]
 
+    open_loop: true
     use_stamped_vel: false
     wheel_separation: 0.35
     wheel_radius: 0.05
     publish_rate: 50.0
-    # pose_covariance_diagonal : [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
-    # twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
 
-    # open_loop: true
-    # enable_odom_tf: true
-
-    #publish_limited_velocity: true
-    #velocity_rolling_window_size: 10
-
-    # Velocity and acceleration limits
-    # Whenever a min_* is unspecified, default to -max_*
-    # linear.x.has_velocity_limits: true
-    # linear.x.has_acceleration_limits: true
-    # linear.x.has_jerk_limits: false
-    # linear.x.max_velocity: 1.0
-    # linear.x.min_velocity: -1.0
-    # linear.x.max_acceleration: 1.0
-    # linear.x.max_jerk: 0.0
-    # linear.x.min_jerk: 0.0
-
-    # angular.z.has_velocity_limits: true
-    # angular.z.has_acceleration_limits: true
-    # angular.z.has_jerk_limits: false
-    # angular.z.max_velocity: 1.0
-    # angular.z.min_velocity: -1.0
-    # angular.z.max_acceleration: 1.0
-    # angular.z.min_acceleration: -1.0
-    # angular.z.max_jerk: 0.0
-    # angular.z.min_jerk: 0.0

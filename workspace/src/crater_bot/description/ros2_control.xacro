@@ -12,10 +12,16 @@
         </joint>
     </xacro:macro>
 
+    <xacro:macro name="odrive" params="name id">
+        <joint name="${name}_wheel_to_lower_suspension">
+            <param name="node_id">${id}</param>
+        </joint>
+    </xacro:macro>
+
     <xacro:macro name="diffbot_ros2_control" params="name use_mock_hardware">
         <ros2_control name="${name}" type="system">
             <!-- Simulation Config -->
-            <xacro:if value="${use_mock_hardware}">
+            <!-- <xacro:if value="${use_mock_hardware}">
                 <hardware>
                     <plugin>gz_ros2_control/GazeboSimSystem</plugin>
                     <param name="calculate_dynamics">true</param>
@@ -26,21 +32,22 @@
                 <xacro:r2c_wheel name="RF" />
                 <xacro:r2c_wheel name="RM" />
                 <xacro:r2c_wheel name="RR" />
-            </xacro:if>
+            </xacro:if> -->
 
             <!-- Crater Config -->
             <xacro:unless value="${use_mock_hardware}">
                 <hardware>
                     <plugin>odrive_ros2_control_plugin/ODriveHardwareInterface</plugin>
-                    <param name="can">can1</param>
+                    <param name="can">can0</param>
                 </hardware>
-                <joint name="RF_wheel_to_lower_suspension">
-                    <param name="node_id">0</param>
-                </joint>
-                <joint name="LF_wheel_to_lower_suspension">
-                    <param name="node_id">1</param>
-                </joint>
+                <xacro:odrive name="LF" id="1" />
+                <!-- <xacro:odrive name="LM" id="2" /> -->
+                <!-- <xacro:odrive name="LR" id="3" /> -->
+                <xacro:odrive name="RF" id="2" />
+                <!-- <xacro:odrive name="RM" id="4" /> -->
+                <!-- <xacro:odrive name="RR" id="5" /> -->
             </xacro:unless>
+
             <!-- <xacro:if value="${use_mock_hardware}">
                 <hardware>
                     <plugin>gz_ros2_control/GazeboSimSystem</plugin>
