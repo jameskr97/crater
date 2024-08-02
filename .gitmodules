@@ -1,3 +1,7 @@
 [submodule "workspace/src/ros_odrive"]
 	path = workspace/src/ros_odrive
 	url = https://github.com/odriverobotics/ros_odrive.git
+[submodule "workspace/src/realsense-ros"]
+	path = workspace/src/realsense-ros
+	url = https://github.com/IntelRealSense/realsense-ros.git
+	branch = ros2-master
