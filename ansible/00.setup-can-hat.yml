@@ -1,0 +1,77 @@
+# This playbook is built to setup the raspberry-pi waveshare FD 2-channel isolated can bus expansion hat.
+# Product Link: https://www.waveshare.com/wiki/2-CH_CAN_FD_HAT
+#
+# YOU MUST DO THE FOLLOWING RASPI-CONFIG CHANGES MANUALLY
+# 1. `sudo raspi-config`
+# 2. Interfacing Options -> SPI -> Enable the interface -> Finish and reboot
+#
+# THINGS TO NOTE ABOUT THIS PLAYBOOK
+# - This is specifically for the rev2.1. It assumes you are not using two boards
+# - Assumes a default 250000 bitrate for compatbility with ODrive default bitrate of 250000 
+
+
+---
+- name: Setup CAN Hat
+  hosts: localhost
+  connection: local
+  become: yes
+
+  vars:
+    unix_username: "{{ lookup('env', 'USER') }}"
+    baudrate: 250000
+
+  tasks:
+    # Install Packages
+    - name: Ensure required packages for compiling C programs are installed
+      ansible.builtin.apt:
+        name: [build-essential, unzip, can-utils]
+        state: present
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Add SPI enable lines to /boot/firmware/config.txt
+      ansible.builtin.lineinfile:
+        path: /boot/firmware/config.txt
+        line: "{{ item }}"
+        state: present
+      with_items:
+        - "dtparam=spi=on"
+        - "dtoverlay=spi1-3cs"
+        - "dtoverlay=mcp251xfd,spi0-0,interrupt=25"
+        - "dtoverlay=mcp251xfd,spi1-0,interrupt=24"
+
+    # Setup CAN network interfaces
+    - name: Create systemd service to set up CAN interfaces
+      ansible.builtin.copy:
+        content: |
+          [Unit]
+          Description=Set up CAN interfaces
+
+          [Service]
+          Type=oneshot
+          ExecStart=/bin/bash -c '\
+            if ! /sbin/ip link show can0 | grep -q "state UP"; then \
+              /sbin/ip link set can0 up type can bitrate {{ bitrate }} dbitrate 8000000 restart-ms 1000 berr-reporting on fd on; \
+              /sbin/ifconfig can0 txqueuelen 65536; \
+            fi; \
+            if ! /sbin/ip link show can1 | grep -q "state UP"; then \
+              /sbin/ip link set can0 up type can bitrate {{ bitrate }} dbitrate 8000000 restart-ms 1000 berr-reporting on fd on; \
+              /sbin/ifconfig can1 txqueuelen 65536; \
+            fi'
+          RemainAfterExit=yes
+
+          [Install]
+          WantedBy=multi-user.target
+        dest: /etc/systemd/system/can0-can1.service
+        mode: '0644'
+
+    - name: Reload systemd daemon to recognize new service
+      ansible.builtin.systemd:
+        daemon_reload: yes
+
+    - name: Enable and start CAN interface service
+      ansible.builtin.systemd:
+        name: can0-can1
+        enabled: yes
+        state: started
+
