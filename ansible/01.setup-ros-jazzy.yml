@@ -45,6 +45,7 @@
           - software-properties-common
           - apt-transport-https
         state: present
+        cache_valid_time: 3600
 
     - name: Download required apt keys
       get_url:

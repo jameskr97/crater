@@ -34,6 +34,7 @@
       apt:
         name: linux-lowlatency
         state: present
+        cache_valid_time: 3600
 
     - name: Notify user of required actions
       debug:
