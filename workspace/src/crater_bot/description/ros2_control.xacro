@@ -40,14 +40,13 @@
                     <plugin>odrive_ros2_control_plugin/ODriveHardwareInterface</plugin>
                     <param name="can">can0</param>
                 </hardware>
-                <xacro:odrive name="LF" id="1" />
-                <!-- <xacro:odrive name="LM" id="2" /> -->
-                <!-- <xacro:odrive name="LR" id="3" /> -->
-                <xacro:odrive name="RF" id="2" />
-                <!-- <xacro:odrive name="RM" id="4" /> -->
-                <!-- <xacro:odrive name="RR" id="5" /> -->
+                <xacro:odrive name="LF" id="11" />
+                <xacro:odrive name="LM" id="13" />
+                <xacro:odrive name="LR" id="15" />
+                <xacro:odrive name="RF" id="12" />
+                <xacro:odrive name="RM" id="14" />
+                <xacro:odrive name="RR" id="16" />
             </xacro:unless>
-
             <!-- <xacro:if value="${use_mock_hardware}">
                 <hardware>
                     <plugin>gz_ros2_control/GazeboSimSystem</plugin>

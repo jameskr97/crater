@@ -11,10 +11,13 @@ controller_manager:
 
 diff_cont:
   ros__parameters:
-    # left_wheel_names: ["LF_wheel_to_lower_suspension", "LM_wheel_to_lower_suspension", "LR_wheel_to_lower_suspension"]
-    # right_wheel_names: ["RF_wheel_to_lower_suspension", "RM_wheel_to_lower_suspension", "RR_wheel_to_lower_suspension"]
-    left_wheel_names: ["RF_wheel_to_lower_suspension"]
-    right_wheel_names: ["LF_wheel_to_lower_suspension"]
+    left_wheel_names: ["LF_wheel_to_lower_suspension", "LM_wheel_to_lower_suspension", "LR_wheel_to_lower_suspension"]
+    right_wheel_names: ["RF_wheel_to_lower_suspension", "RM_wheel_to_lower_suspension", "RR_wheel_to_lower_suspension"]
+    # left_wheel_names: ["RF_wheel_to_lower_suspension"]
+    # right_wheel_names: ["LF_wheel_to_lower_suspension"]
+
+    left_wheel_radius_multiplier: -1.0
+    right_wheel_radius_multiplier: 1.0
 
     open_loop: true
     use_stamped_vel: false

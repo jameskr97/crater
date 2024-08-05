@@ -63,12 +63,12 @@
     <!-- Add the 6 wheels to the robot -->
     <!-- 3 Left Wheels -->
     <xacro:wheel parent="left_front_lower_susp" prefix="LF" reflect="1" offset_x="0.065" offset_z="-0.06"/>
-    <!-- <xacro:wheel parent="left_front_lower_susp" prefix="LM" reflect="1" offset_x="-0.065" offset_z="-0.06"/> -->
-    <!-- <xacro:wheel parent="left_base_arm_back" prefix="LR" reflect="1" offset_x="${-back_length}" offset_z="0"/> -->
+    <xacro:wheel parent="left_front_lower_susp" prefix="LM" reflect="1" offset_x="-0.065" offset_z="-0.06"/>
+    <xacro:wheel parent="left_base_arm_back" prefix="LR" reflect="1" offset_x="${-back_length}" offset_z="0"/>
 
     <!-- 3 Right Wheels -->
     <xacro:wheel parent="right_front_lower_susp" prefix="RF" reflect="-1" offset_x="0.065" offset_z="-0.06"/>
-    <!-- <xacro:wheel parent="right_front_lower_susp" prefix="RM" reflect="-1" offset_x="-0.065" offset_z="-0.06"/> -->
-    <!-- <xacro:wheel parent="right_base_arm_back" prefix="RR" reflect="-1" offset_x="${-back_length}" offset_z="0"/> -->
+    <xacro:wheel parent="right_front_lower_susp" prefix="RM" reflect="-1" offset_x="-0.065" offset_z="-0.06"/>
+    <xacro:wheel parent="right_base_arm_back" prefix="RR" reflect="-1" offset_x="${-back_length}" offset_z="0"/>
 
 </robot>
