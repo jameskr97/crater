@@ -6,21 +6,24 @@ joy_node:
 
 teleop_node:
   ros__parameters:
+    publish_stamped_twist: true
     
     axis_linear:  # Left thumb stick vertical
       x: 1
     scale_linear:
-      x: 0.5
+      x: 30.0
     scale_linear_turbo:
       x: 1.0
 
     axis_angular:  # Left thumb stick horizontal
-      yaw: 0
+      yaw: 1
     scale_angular:
-      yaw: 0.5
+      yaw: 15.0
     scale_angular_turbo:
       yaw: 1.0
 
+    # press the LEFT SHOULDER BUTTON to activate the joystick. Only the left joystick is functional.
     require_enable_button: true
     enable_button: 4  # Left shoulder button
     enable_turbo_button: 5 # Right shoulder button
+
