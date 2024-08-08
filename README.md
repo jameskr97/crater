@@ -4,6 +4,28 @@ This codebase is written for the Caltech Crater 6-wheel robot.
 
 The base of this repo was written by a JPL intern who needed a project, and found one in your subbasement. I will do my best to make this consumable to those who have experience writing software, and those who have less experience but need to try and accomplish some task.
 
+## THINGS TO KNOW FOR CANADA COMPETITION
+
+Always use tmux. it will start a terminal on the rover that will the program keep running even after it crashes. Login, and just type `tmux`. It will open another termianl (you'll see  a green bar at the bottom). If you get disconnect, just ssh back in and type `tmux attach` and you'll get your whole terminal back.
+
+### How to start script on rover
+```bash
+$ cd ~/_CODE/crater/workspace
+$ source install/setup.bash
+# ros2 launch crater_bot launch_robot.launch.py
+```
+
+### How to start the script on the laptop
+```bash
+$ cd ~/Desktop/crater/workspace
+$ source install/setup.bash
+# ros2 launch crater_bot joystick.launch.py
+```
+
+
+
+### How to start the rover on 
+
 ## Things to know before getting started
 - Everything here assumes you're running Ubuntu. At the time of writing your dev machine and raspberry pi are running ubuntu.
 
