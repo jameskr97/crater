@@ -13,15 +13,24 @@ diff_cont:
   ros__parameters:
     left_wheel_names: ["LF_wheel_to_lower_suspension", "LM_wheel_to_lower_suspension", "LR_wheel_to_lower_suspension"]
     right_wheel_names: ["RF_wheel_to_lower_suspension", "RM_wheel_to_lower_suspension", "RR_wheel_to_lower_suspension"]
-    # left_wheel_names: ["RF_wheel_to_lower_suspension"]
-    # right_wheel_names: ["LF_wheel_to_lower_suspension"]
 
+    # If the wheels are moving in the wrong direction, then try switching one of these to be negative.
+    # With the current setup, then the wheel that is moving in the wrong direction should be negative.
     left_wheel_radius_multiplier: -1.0
     right_wheel_radius_multiplier: 1.0
+    publish_limited_velocity: true # this creates /diff_cont/cmd_vel_out so you can see what velocities are actually being sent to the wheels
 
+    # Misc config. Only change wheel separation. (left to right distance from center of wheel). I beleve it's in meters,
+    # but I'm not 100% confident on that, but many other URDF values are default in meters, so I assume the same here.
+    #
     open_loop: true
-    use_stamped_vel: false
-    wheel_separation: 0.35
-    wheel_radius: 0.05
-    publish_rate: 50.0
+    wheel_separation: 2.0  # must be a decimal number
+    wheel_radius: 0.05 # must be a decimal number
+    publish_rate: 50.0 # must be a decimal number
 
+
+    # KEEP THESE FALSE. You can make the true, but that would require configuration of what the
+    # velocity limits should be, and out setup currently works best without velocity limits
+    linear.x.has_velocity_limits: false
+    linear.x.has_acceleration_limits: false
+    linear.x.has_jerk_limits: false
