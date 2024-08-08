@@ -20,7 +20,7 @@
   vars:
     unix_username: "{{ lookup('env', 'USER') }}"
     should_modify_bash_profile: true
-    ros2_distro: jazzy
+    ros2_distro: rolling
     ros2_config: desktop # desktop or ros-base
     ros1_gpgkey_url: https://raw.githubusercontent.com/ros/rosdistro/master/ros.key
     ros2_repo_url: http://packages.ros.org/ros2/ubuntu
@@ -104,6 +104,7 @@
           - ros-{{ ros2_distro }}-ros2-controllers
           - ros-{{ ros2_distro }}-gz-ros2-control
           - ros-{{ ros2_distro }}-joy
+          - ros-{{ ros2_distro }}-teleop-twist-joy
         state: present
 
 
